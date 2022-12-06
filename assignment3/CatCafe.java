@@ -78,7 +78,27 @@ public class CatCafe implements Iterable<Cat> {
 		/*
 		 * TODO: ADD YOUR CODE HERE
 		 */
-		return null;
+		ArrayList<Cat> hallOfFame = new ArrayList<>(numOfCatsToHonor);
+		Iterator<Cat> i = new CatCafeIterator();
+//		CatNode cur = root;
+		while(i.hasNext() ){
+			hallOfFame.add(i.next());
+		}
+
+		//helper to search a given cat with fur thickness
+//		private CatNode searchFur(CatNode root, Cat c){
+//			// Base case
+//			if (root == null || root.catEmployee.getFurThickness() == c.getFurThickness())
+//				return root;
+//			// c fur is thicker than root's fur
+//			if (root.catEmployee.getFurThickness()<c.getFurThickness()){
+//				return searchFur(root.senior,c);
+//			}else{ // c fur is thinner than root's fur
+//				return searchFur(root.junior,c);
+//			}
+//		}
+
+		return hallOfFame;
 	}
 
 	// Returns the expected grooming cost the cafe has to incur in the next numDays days
@@ -86,7 +106,11 @@ public class CatCafe implements Iterable<Cat> {
 		/*
 		 * TODO: ADD YOUR CODE HERE
 		 */
-		return 0;
+
+		double expense = 0;
+
+
+		return expense;
 	}
 
 	// returns a list of list of Cats. 
@@ -124,12 +148,13 @@ public class CatCafe implements Iterable<Cat> {
 			/*
 			 * TODO: ADD YOUR CODE HERE
 			 */
-//			if (root == null){
-//				root = new CatNode(c);
-//			}
+			if (root == null){
+				root = new CatNode(c);
+			}
 			if (c.compareTo(root.catEmployee)<0){
 				root = add(root,c);
 
+				// NEED TO FIX (ROTATION)
 				if (root.junior.catEmployee.getFurThickness() > root.catEmployee.getFurThickness()){
 					root = RightRotate(root);
 				}
@@ -162,6 +187,7 @@ public class CatCafe implements Iterable<Cat> {
 			return newRoot;
 		}
 
+		// rotations
 		private CatNode RightRotate(CatNode parent){
 			CatNode leftChild = parent.junior;
 
@@ -185,7 +211,33 @@ public class CatCafe implements Iterable<Cat> {
 			/*
 			 * TODO: ADD YOUR CODE HERE**
 			 */
-			return null;
+
+			root = remove(root,c); // step 1
+
+//			if (root.catEmployee.getFurThickness() < root.senior.catEmployee.getFurThickness()){
+//				root = LeftRotate(root);
+//			}
+
+			return root;
+			// remove cat step (1) all passed but still need to fix heap property (2)
+		}
+		private CatNode remove(CatNode root,Cat c){
+			if (root == null){
+				return null;
+			} else if (c.compareTo(root.catEmployee) < 0) {
+				root.junior = remove(root.junior,c);
+			} else if (c.compareTo(root.catEmployee) > 0) {
+				root.senior = remove(root.senior,c);
+				//Base cases
+			} else if (root.junior == null) {
+				root = root.senior;
+			} else if (root.senior == null) {
+				root = root.junior;
+			}else {
+				root.catEmployee = root.junior.findMostSenior(); // find the most senior cat in the left subtree and copy it to the root
+				root.junior = remove(root.junior,root.catEmployee); // remove the duplicate seniorC from the left subtree
+			}
+			return root;
 		}
 
 		// find the cat with highest seniority in the tree rooted at this
@@ -203,7 +255,6 @@ public class CatCafe implements Iterable<Cat> {
 			}
 			return mostSenior.catEmployee;
 		}
-
 		// find the cat with lowest seniority in the tree rooted at this
 		public Cat findMostJunior() {
 			/*
@@ -215,7 +266,7 @@ public class CatCafe implements Iterable<Cat> {
 				return null;
 			}
 			while(mostJunior.junior != null){
-				mostJunior = mostJunior.senior;
+				mostJunior = mostJunior.junior;
 			}
 			return mostJunior.catEmployee;
 		}
@@ -373,24 +424,24 @@ public class CatCafe implements Iterable<Cat> {
 	}
 
 	// tester to check iterator
-	private static void iteratorTest() {
-		Cat B = new Cat("Buttercup", 45, 53, 5, 85.0);
-		Cat C = new Cat("Chessur", 8, 23, 2, 250.0);
-		Cat J = new Cat("Jonesy", 0, 21, 12, 30.0);
-		Cat JJ = new Cat("JIJI", 156, 17, 1, 30.0);
-		CatCafe Cafe = new CatCafe();
-		Cafe.hire(B);Cafe.hire(C);Cafe.hire(J);Cafe.hire(JJ);
-		Iterator itr = Cafe.iterator();
-		while (itr.hasNext()) {
-			System.out.println(itr.next().toString());
-		}
-		try {
-			System.out.println(itr.next().toString());
-		}
-		catch (NoSuchElementException e) {
-			System.out.println("No such element exists. The previous element has a next cat: "+itr.hasNext());
-		}
-	}
+//	private static void iteratorTest() {
+//		Cat B = new Cat("Buttercup", 45, 53, 5, 85.0);
+//		Cat C = new Cat("Chessur", 8, 23, 2, 250.0);
+//		Cat J = new Cat("Jonesy", 0, 21, 12, 30.0);
+//		Cat JJ = new Cat("JIJI", 156, 17, 1, 30.0);
+//		CatCafe Cafe = new CatCafe();
+//		Cafe.hire(B);Cafe.hire(C);Cafe.hire(J);Cafe.hire(JJ);
+//		Iterator itr = Cafe.iterator();
+//		while (itr.hasNext()) {
+//			System.out.println(itr.next().toString());
+//		}
+//		try {
+//			System.out.println(itr.next().toString());
+//		}
+//		catch (NoSuchElementException e) {
+//			System.out.println("No such element exists. The previous element has a next cat: "+itr.hasNext());
+//		}
+//	}
 
 }
 
