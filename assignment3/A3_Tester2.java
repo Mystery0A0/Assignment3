@@ -1312,11 +1312,11 @@ public class A3_Tester2 {
 //            "assignment3.shallow_copy1",
 //            "assignment3.shallow_copy2",
 //            "assignment3.shallow_copy3",
-//            "assignment3.hire_rotation1",
-//            "assignment3.hire_rotation2",
-//            "assignment3.hire_rotation3",
-//            "assignment3.hire_rotation4",
-//            "assignment3.hire_megaRotation",
+            "assignment3.hire_rotation1",
+            "assignment3.hire_rotation2",
+            "assignment3.hire_rotation3",
+            "assignment3.hire_rotation4",
+            "assignment3.hire_megaRotation",
 //            "assignment3.retire_rotation1",
 //            "assignment3.retire_rotation2",
 //            "assignment3.retire_megaRotation3",
@@ -1339,8 +1339,8 @@ public class A3_Tester2 {
 //            "assignment3.budgetGroomingExpenses3",
 //            "assignment3.budgetGroomingExpenses4",
 //            "assignment3.budgetGroomingExpenses5",
-            "assignment3.iterator1",
-            "assignment3.iterator2"
+//            "assignment3.iterator1",
+//            "assignment3.iterator2"
     };
     public static void main(String[] args) {
         int numPassed = 0;

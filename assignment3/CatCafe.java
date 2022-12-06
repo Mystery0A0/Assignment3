@@ -43,10 +43,13 @@ public class CatCafe implements Iterable<Cat> {
 
 	// add a cat to the cafe database
 	public void hire(Cat c) {
+		System.out.println("add " + c);
 		if (root == null) 
 			root = new CatNode(c);
 		else
 			root = root.hire(c);
+//		System.out.println(root);
+
 	}
 
 	// removes a specific cat from the cafe database
@@ -145,65 +148,81 @@ public class CatCafe implements Iterable<Cat> {
 
 		// add the c to the tree rooted at this and returns the root of the resulting tree
 		public CatNode hire (Cat c) {
-			/*
-			 * TODO: ADD YOUR CODE HERE
-			 */
 			if (root == null){
 				root = new CatNode(c);
-			}
-			if (c.compareTo(root.catEmployee)<0){
-				root = add(root,c);
 
-				// NEED TO FIX (ROTATION)
-				if (root.junior.catEmployee.getFurThickness() > root.catEmployee.getFurThickness()){
-					root = RightRotate(root);
-				}
-			}else{
-				root = add(root,c);
-				if (root.senior.catEmployee.getFurThickness() > root.catEmployee.getFurThickness()){
-					root = LeftRotate(root);
-				}
+				return root;
 			}
+			//if
+			root = add(root,c);
 			return root;
 		}
 
 		//helper
 		private CatNode add(CatNode newRoot,Cat c){
-
 			if (newRoot == null){
 				return new CatNode(c);
 			}
 
-			if (c.compareTo(newRoot.catEmployee)<0) {
+			if (c.getMonthHired() > newRoot.catEmployee.getMonthHired()) {
 				CatNode leftChild = add(newRoot.junior,c);
 				newRoot.junior = leftChild;
 				leftChild.parent = newRoot;
+				if(newRoot.catEmployee.getFurThickness() < leftChild.catEmployee.getFurThickness()){
+					return RightRotate(newRoot);
+				}
 
-			} else if (c.compareTo(newRoot.catEmployee)>0) {
+			} else if (c.getMonthHired() < newRoot.catEmployee.getMonthHired()) {
 				CatNode rightChild = add(newRoot.senior,c);
 				newRoot.senior = rightChild;
 				rightChild.parent = newRoot;
+				if(newRoot.catEmployee.getFurThickness() < rightChild.catEmployee.getFurThickness()){
+					return LeftRotate(newRoot);
+				}
 			}
+//			System.out.println("new root is "+newRoot.catEmployee);
+//			System.out.println("-------------------------------------");
+
 			return newRoot;
 		}
 
 		// rotations
 		private CatNode RightRotate(CatNode parent){
+			CatNode grandParent = parent.parent;
 			CatNode leftChild = parent.junior;
-
-			parent.junior = leftChild.senior; // B becomes left child of parent
+			CatNode tmp = leftChild.senior;
 			leftChild.senior = parent;
-
-			return leftChild; // return left child
+			parent.parent = leftChild;
+			parent.junior = tmp;
+			if(grandParent != null) {
+				leftChild.parent = grandParent;
+				if (grandParent.catEmployee.getMonthHired() < parent.catEmployee.getMonthHired())
+					grandParent.junior = leftChild;
+				else
+					grandParent.senior = leftChild;
+			}
+			return leftChild;
 		}
 
 		private CatNode LeftRotate(CatNode parent){
+			CatNode grandParent = parent.parent;
 			CatNode rightChild = parent.senior;
+			CatNode tmp = rightChild.junior;
+			rightChild.junior = parent;
+			parent.parent = rightChild;
+			parent.senior = tmp;
+			if(grandParent != null){
+				rightChild.parent = grandParent;
+				if(grandParent.catEmployee.getMonthHired() < parent.catEmployee.getMonthHired())
+					grandParent.junior = rightChild;
+				else
+					grandParent.senior = rightChild;
+			}
+			return rightChild;
 
-			parent.senior = rightChild.junior; // A becomes right child of parent
-			rightChild.senior = parent;
 
-			return rightChild; // return right child
+
+//			System.out.println(grandParent);
 		}
 
 		// remove c from the tree rooted at this and returns the root of the resulting tree
