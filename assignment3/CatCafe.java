@@ -157,7 +157,6 @@ public class CatCafe implements Iterable<Cat> {
 		 * TODO: ADD YOUR CODE HERE
 		 */
 		ArrayList<Cat> allCats = new ArrayList<>();
-		ArrayList<Cat> groomingCats = new ArrayList<>();
 		double expense = 0;
 
 		CatCafeIterator it = new CatCafeIterator();
@@ -165,17 +164,12 @@ public class CatCafe implements Iterable<Cat> {
 		while (it.hasNext()){
 			allCats.add(it.next());
 		}
-//add grooming cats into an arraylist
+//add grooming costs
 		for (Cat c:allCats) {
 			if (c.getDaysToNextGrooming() <= numDays){
-				groomingCats.add(c);
+				expense = expense + c.getExpectedGroomingCost();
 			}
 		}
-//add up the total cost of grooming cost
-		for (Cat c:groomingCats) {
-			expense = expense + c.getExpectedGroomingCost();
-		}
-
 		return expense;
 	}
 
@@ -188,7 +182,6 @@ public class CatCafe implements Iterable<Cat> {
 		 * TODO: ADD YOUR CODE HERE
 		 */
 		ArrayList<ArrayList<Cat>> groomingSchedule = new ArrayList<>();
-//		ArrayList<Cat> catsNeedGrooming = new ArrayList<>();
 		ArrayList<Cat> allCats = new ArrayList<>();
 
 		CatCafeIterator it = new CatCafeIterator();
@@ -411,30 +404,35 @@ public class CatCafe implements Iterable<Cat> {
 			/*
 			 * TODO: ADD YOUR CODE HERE
 			 */
-			CatNode mostSenior = root;
+//			CatNode mostSenior = root;
+//
+//			if (mostSenior == null){
+//				return null;
+//			}
+//			while(mostSenior.senior != null){
+//				mostSenior = mostSenior.senior;
+//			}
+//			return mostSenior.catEmployee;
+//		}
 
-			if (mostSenior == null){
-				return null;
-			}
-			while(mostSenior.senior != null){
-				mostSenior = mostSenior.senior;
-			}
-			return mostSenior.catEmployee;
+		if (this.senior != null){
+			return this.senior.findMostSenior();
+		}else{
+			return this.catEmployee;
 		}
+
+	}
 		// find the cat with lowest seniority in the tree rooted at this
 		public Cat findMostJunior() {
 			/*
 			 * TODO: ADD YOUR CODE HERE
 			 */
-			CatNode mostJunior = root;
 
-			if (mostJunior == null){
-				return null;
+			if (this.junior != null){
+				return this.junior.findMostJunior();
+			}else{
+				return this.catEmployee;
 			}
-			while(mostJunior.junior != null){
-				mostJunior = mostJunior.junior;
-			}
-			return mostJunior.catEmployee;
 		}
 
 		// Feel free to modify the toString() method if you'd like to see something else displayed.
@@ -526,8 +524,6 @@ public class CatCafe implements Iterable<Cat> {
 				return false;
 			}
 			return true;
-
-//			return !catStack.isEmpty() || current != null;
 		}
 	}
 
