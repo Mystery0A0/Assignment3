@@ -43,13 +43,10 @@ public class CatCafe implements Iterable<Cat> {
 
 	// add a cat to the cafe database
 	public void hire(Cat c) {
-		System.out.println("add " + c);
 		if (root == null) 
 			root = new CatNode(c);
 		else
 			root = root.hire(c);
-//		System.out.println(root);
-
 	}
 
 	// removes a specific cat from the cafe database
@@ -77,30 +74,80 @@ public class CatCafe implements Iterable<Cat> {
 	// returns a list of cats containing the top numOfCatsToHonor cats 
 	// in the cafe with the thickest fur. Cats are sorted in descending 
 	// order based on their fur thickness. 
-	public ArrayList<Cat> buildHallOfFame(int numOfCatsToHonor) {
+	public ArrayList<Cat> buildHallOfFame(int numOfCatsToHonor) { // NONONONONONNONONONO
 		/*
 		 * TODO: ADD YOUR CODE HERE
 		 */
-		ArrayList<Cat> hallOfFame = new ArrayList<>(numOfCatsToHonor);
-		Iterator<Cat> i = new CatCafeIterator();
-//		CatNode cur = root;
-		while(i.hasNext() ){
-			hallOfFame.add(i.next());
-		}
-
-		//helper to search a given cat with fur thickness
-//		private CatNode searchFur(CatNode root, Cat c){
-//			// Base case
-//			if (root == null || root.catEmployee.getFurThickness() == c.getFurThickness())
-//				return root;
-//			// c fur is thicker than root's fur
-//			if (root.catEmployee.getFurThickness()<c.getFurThickness()){
-//				return searchFur(root.senior,c);
-//			}else{ // c fur is thinner than root's fur
-//				return searchFur(root.junior,c);
+//		ArrayList<Cat> hallOfFame = new ArrayList<>();
+//		ArrayList<CatNode> queue = new ArrayList<>();
+//
+//		queue.add(root); // enqueue the root
+//
+//
+//		while (!queue.isEmpty() || hallOfFame.size()!= numOfCatsToHonor){
+//			CatNode cur = queue.get(0);
+//			queue.remove(0); // dequeue
+//
+//			hallOfFame.add(cur.catEmployee); // visit cur
+//
+//			if (cur.junior != null) {
+//				if (cur.senior != null && cur.junior.catEmployee.getFurThickness() > cur.senior.catEmployee.getFurThickness()) {
+//					queue.add(cur.junior); // enqueue the bigger child
+//					queue.add(cur.senior); // enqueue the smaller child
+//				}else if (cur.senior == null) {
+//					queue.add(cur.junior);
+//				}else{ // cur.junior.catEmployee.getFurThickness() < cur.senior.catEmployee.getFurThickness())
+//					queue.add(cur.senior);
+//					queue.add(cur.junior);
+//				}
+//			}else{ // if cur.junior == null
+//				if (cur.senior != null){
+//					queue.add(cur.senior);
+//				}// both children are null
 //			}
+////			if (cur.senior != null){
+////				if (cur.junior != null && cur.senior.catEmployee.getFurThickness() > cur.junior.catEmployee.getFurThickness()){
+////					queue.add(cur.senior);
+////				}
+////			}
+//
 //		}
 
+//******************************************************************************************
+//		ArrayList<Cat> hallOfFame = new ArrayList<>();
+//		ArrayList<Cat> allCats = new ArrayList<>();
+//		CatCafeIterator it = new CatCafeIterator();
+//
+//		while (it.hasNext()){ // store all cats
+//			allCats.add(it.next());
+//		}
+//		int furThickest = -1;
+//
+//		for (int i = 0; i < allCats.size() ; i++) { // find the thickest fur
+//			if (allCats.get(i).getFurThickness() > furThickest){
+//				furThickest = allCats.get(i).getFurThickness();
+//			}
+//		}
+//
+//		for (int i = furThickest; i <= 0 ; i--) {
+//			for (int j = 0; j < allCats.size(); j++) {
+//				if (allCats.get(j).getFurThickness() == i){
+//					hallOfFame.add(allCats.get(j));
+//				}
+//				if (hallOfFame.size() == numOfCatsToHonor){
+//					break;
+//				}
+//			}
+//		}
+//		return hallOfFame;
+// *********************************************************************
+		ArrayList<Cat> hallOfFame = new ArrayList<>();
+		CatCafe copy = new CatCafe(this);
+
+		while(copy.root!= null || hallOfFame.size() != numOfCatsToHonor){
+			hallOfFame.add(root.catEmployee);
+			copy.retire(root.catEmployee);
+		}
 		return hallOfFame;
 	}
 
@@ -109,9 +156,25 @@ public class CatCafe implements Iterable<Cat> {
 		/*
 		 * TODO: ADD YOUR CODE HERE
 		 */
-
+		ArrayList<Cat> allCats = new ArrayList<>();
+		ArrayList<Cat> groomingCats = new ArrayList<>();
 		double expense = 0;
 
+		CatCafeIterator it = new CatCafeIterator();
+// add all cats into an arraylist
+		while (it.hasNext()){
+			allCats.add(it.next());
+		}
+//add grooming cats into an arraylist
+		for (Cat c:allCats) {
+			if (c.getDaysToNextGrooming() <= numDays){
+				groomingCats.add(c);
+			}
+		}
+//add up the total cost of grooming cost
+		for (Cat c:groomingCats) {
+			expense = expense + c.getExpectedGroomingCost();
+		}
 
 		return expense;
 	}
@@ -124,7 +187,33 @@ public class CatCafe implements Iterable<Cat> {
 		/*
 		 * TODO: ADD YOUR CODE HERE
 		 */
-		return null;
+		ArrayList<ArrayList<Cat>> groomingSchedule = new ArrayList<>();
+//		ArrayList<Cat> catsNeedGrooming = new ArrayList<>();
+		ArrayList<Cat> allCats = new ArrayList<>();
+
+		CatCafeIterator it = new CatCafeIterator();
+// add all cats into an arraylist
+		while (it.hasNext()){
+			allCats.add(it.next());
+		}
+		int size = allCats.size();
+		int maxDay = -1;
+
+		for (int i = 0; i < size; i++) { //iterate through all cats in allCats
+			if (allCats.get(i).getDaysToNextGrooming() > maxDay){
+				maxDay = allCats.get(i).getDaysToNextGrooming(); // store the max day
+				}
+			}
+		for (int nextDays = 0; nextDays <= maxDay; nextDays = nextDays+7 ) {
+			ArrayList<Cat> catsNeedGrooming = new ArrayList<>(); // to create the new arraylist with next 7 days
+			for (int i = 0; i < size; i++) {
+				if (nextDays <= allCats.get(i).getDaysToNextGrooming() && allCats.get(i).getDaysToNextGrooming() < nextDays + 7) {
+					catsNeedGrooming.add(allCats.get(i));
+				}
+			}
+			groomingSchedule.add(catsNeedGrooming);
+		}
+		return groomingSchedule;
 	}
 
 
@@ -148,81 +237,137 @@ public class CatCafe implements Iterable<Cat> {
 
 		// add the c to the tree rooted at this and returns the root of the resulting tree
 		public CatNode hire (Cat c) {
+			/*
+			 * TODO: ADD YOUR CODE HERE
+			 */
 			if (root == null){
 				root = new CatNode(c);
-
 				return root;
 			}
-			//if
 			root = add(root,c);
 			return root;
+//			//*******************************************************
+//			if (c.compareTo(root.catEmployee)<0){
+//				root = add(root,c);
+//
+//				// NEED TO FIX (ROTATION)
+//				if (root.junior.catEmployee.getFurThickness() > root.catEmployee.getFurThickness()){
+//					root = RightRotate(root);
+//				}
+//			}else{
+//				root = add(root,c);
+//				if (root.senior.catEmployee.getFurThickness() > root.catEmployee.getFurThickness()){
+//					root = LeftRotate(root);
+//				}
+//			}
+//			return root;
+//			//********************************************************************
+
 		}
 
 		//helper
 		private CatNode add(CatNode newRoot,Cat c){
+
 			if (newRoot == null){
 				return new CatNode(c);
 			}
 
-			if (c.getMonthHired() > newRoot.catEmployee.getMonthHired()) {
+			if (c.compareTo(newRoot.catEmployee)<0) {
+//			if (c.getMonthHired() > newRoot.catEmployee.getMonthHired()) {
 				CatNode leftChild = add(newRoot.junior,c);
 				newRoot.junior = leftChild;
 				leftChild.parent = newRoot;
-				if(newRoot.catEmployee.getFurThickness() < leftChild.catEmployee.getFurThickness()){
+
+				if (newRoot.catEmployee.getFurThickness() < leftChild.catEmployee.getFurThickness()){
 					return RightRotate(newRoot);
 				}
 
-			} else if (c.getMonthHired() < newRoot.catEmployee.getMonthHired()) {
+			} else if (c.compareTo(newRoot.catEmployee)>0) {
+//			} else if (c.getMonthHired() < newRoot.catEmployee.getMonthHired()) {
 				CatNode rightChild = add(newRoot.senior,c);
 				newRoot.senior = rightChild;
 				rightChild.parent = newRoot;
-				if(newRoot.catEmployee.getFurThickness() < rightChild.catEmployee.getFurThickness()){
+
+				if (newRoot.catEmployee.getFurThickness() < rightChild.catEmployee.getFurThickness()){
 					return LeftRotate(newRoot);
 				}
 			}
-//			System.out.println("new root is "+newRoot.catEmployee);
-//			System.out.println("-------------------------------------");
-
 			return newRoot;
 		}
 
-		// rotations
+//		private CatNode RightRotate(CatNode newRoot){
+//			CatNode oldParent = newRoot.parent;
+//			newRoot.parent = oldParent.parent;
+//			oldParent.parent = newRoot;
+//
+//			CatNode oldSenior = newRoot.senior;
+//			newRoot.senior = oldParent;
+//
+//			if (oldSenior.catEmployee!= null){
+//				oldParent.junior = oldSenior;
+//				oldSenior.parent = oldParent;
+//			}
+//			return newRoot;
+//		}
+
+
+//		private CatNode LeftRotate(CatNode newRoot){
+//			CatNode oldParent = newRoot.parent;
+//			newRoot.parent = oldParent.parent;
+//			oldParent.parent = newRoot;
+//
+//			CatNode oldJunior = newRoot.junior;
+//			newRoot.junior = oldParent;
+//
+//			if (oldJunior.catEmployee!= null){
+//				oldParent.senior = oldJunior;
+//				oldJunior.parent = oldParent;
+//			}
+//			return newRoot;
+//		}
+
 		private CatNode RightRotate(CatNode parent){
 			CatNode grandParent = parent.parent;
 			CatNode leftChild = parent.junior;
-			CatNode tmp = leftChild.senior;
+			CatNode oldSenior = leftChild.senior;
+
 			leftChild.senior = parent;
 			parent.parent = leftChild;
-			parent.junior = tmp;
+			parent.junior = oldSenior;
+
 			if(grandParent != null) {
 				leftChild.parent = grandParent;
-				if (grandParent.catEmployee.getMonthHired() < parent.catEmployee.getMonthHired())
+				if (grandParent.catEmployee.compareTo(parent.catEmployee) > 0) // grandparent has higher seniority
+//				if(grandParent.catEmployee.getMonthHired() < parent.catEmployee.getMonthHired())
 					grandParent.junior = leftChild;
-				else
+				else // left child has higher seniority
 					grandParent.senior = leftChild;
+			}else{ // if grandparent is null (parent is root)
+				leftChild.parent = null;
 			}
 			return leftChild;
 		}
 
-		private CatNode LeftRotate(CatNode parent){
+		private CatNode LeftRotate(CatNode parent) {
 			CatNode grandParent = parent.parent;
 			CatNode rightChild = parent.senior;
-			CatNode tmp = rightChild.junior;
+			CatNode oldJunior = rightChild.junior;
+
 			rightChild.junior = parent;
 			parent.parent = rightChild;
-			parent.senior = tmp;
-			if(grandParent != null){
+			parent.senior = oldJunior;
+
+			if (grandParent != null) {
 				rightChild.parent = grandParent;
-				if(grandParent.catEmployee.getMonthHired() < parent.catEmployee.getMonthHired())
+				if (grandParent.catEmployee.compareTo(parent.catEmployee) > 0) // grandparent has higher seniority
+//				if(grandParent.catEmployee.getMonthHired() < parent.catEmployee.getMonthHired())
 					grandParent.junior = rightChild;
-				else
+				else // left child has higher seniority
 					grandParent.senior = rightChild;
+			}else{ // if grandparent is null (parent is root)
+				rightChild.parent = null;
 			}
 			return rightChild;
-
-
-
-//			System.out.println(grandParent);
 		}
 
 		// remove c from the tree rooted at this and returns the root of the resulting tree
@@ -243,10 +388,12 @@ public class CatCafe implements Iterable<Cat> {
 		private CatNode remove(CatNode root,Cat c){
 			if (root == null){
 				return null;
+
 			} else if (c.compareTo(root.catEmployee) < 0) {
 				root.junior = remove(root.junior,c);
 			} else if (c.compareTo(root.catEmployee) > 0) {
 				root.senior = remove(root.senior,c);
+
 				//Base cases
 			} else if (root.junior == null) {
 				root = root.senior;
@@ -413,6 +560,8 @@ public class CatCafe implements Iterable<Cat> {
 
 		Cat BC = new Cat("Blofeld's cat", 6, 72, 18, 120.0);
 		Cat L = new Cat("Lucifer", 10, 44, 20, 50.0);
+
+
 
 	}
 
