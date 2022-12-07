@@ -462,7 +462,6 @@ public class CatCafe implements Iterable<Cat> {
 
 		ArrayList<CatNode> s; // the stack to store cat node
 
-//		ArrayList<Cat> catStack; //the stack to store cat
 		CatNode current;
 		private CatCafeIterator() {
 			/*
@@ -470,20 +469,18 @@ public class CatCafe implements Iterable<Cat> {
 			 */
 			this.s = new ArrayList<>();
 
-//			this.catStack = new ArrayList<>();
-
 			this.current = root;
 
-//			this.mostLeftNode(root); // to generate the stack
+			this.mostLeftNode(root); // to generate the stack
 		}
 
 		// helper method
-//		private void mostLeftNode(CatNode cur){
-//			while (cur != null){
-//				this.s.add(cur); // push()
-//				cur = cur.junior;
-//			}
-//		}
+		private void mostLeftNode(CatNode cur){
+			while (cur != null){
+				this.s.add(cur); // push()
+				cur = cur.junior;
+			}
+		}
 
 		public Cat next(){
 			/*
@@ -492,59 +489,46 @@ public class CatCafe implements Iterable<Cat> {
 
 			// access the cats in ascending order of seniority
 
-//			if (s.isEmpty()){
-//				throw new NoSuchElementException("No more cats to iterate on");
-//			}else{
-//				CatNode currentMin = s.get(s.size() - 1); // current min is the top of the stack
-//				s.remove(s.size()-1); // s.pop()
-//
-//				if (currentMin.senior != null){ // if current min has right subtree
-//					this.mostLeftNode(currentMin.senior);
-//				}
-//				return currentMin.catEmployee;
-//			}
-
-			if (!hasNext()){
+			if (s.isEmpty()){
 				throw new NoSuchElementException("No more cats to iterate on");
 			}else{
-				while (current != null){
-					this.s.add(current); // push()
-					current = current.junior;
-				}
-				current = s.get(s.size() -1 ); // pop()
-				s.remove(s.size() -1);
+				CatNode currentMin = s.get(s.size() - 1); // current min is the top of the stack
+				s.remove(s.size()-1); // s.pop()
 
-				Cat nextCat = current.catEmployee;
-				current = current.senior;
-				return nextCat;
+				if (currentMin.senior != null){ // if current min has right subtree
+					this.mostLeftNode(currentMin.senior);
+				}
+				return currentMin.catEmployee;
 			}
+
 //			if (!hasNext()){
 //				throw new NoSuchElementException("No more cats to iterate on");
 //			}else{
 //				while (current != null){
-//					this.catStack.add(current.catEmployee); // = push()
+//					this.s.add(current); // push()
 //					current = current.junior;
 //				}
-//				Cat nextCat = catStack.get(catStack.size() - 1); // = pop()
-//				catStack.remove(catStack.size() - 1);
+//				current = s.get(s.size() -1 ); // pop()
+//				s.remove(s.size() -1);
 //
+//				Cat nextCat = current.catEmployee;
 //				current = current.senior;
 //				return nextCat;
 //			}
-
 		}
 
 		public boolean hasNext(){
 			/*
 			 * TODO: ADD YOUR CODE HERE
 			 */
+
 			if (s.isEmpty() || current == null){ // if stack is empty -> no more cats to iterate
 				return false;
 			}
 			return true;
-		}
+
 //			return !catStack.isEmpty() || current != null;
-//		}
+		}
 	}
 
 	public static void main(String[] args) {
