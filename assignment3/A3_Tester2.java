@@ -494,7 +494,7 @@ class hire_megaRotation implements Runnable{
     }
 }
 
-class retire_rotation1 implements Runnable{
+class    retire_rotation1 implements Runnable{
     @Override
     public void run() {
         // example from the pdf
@@ -539,7 +539,6 @@ class retire_rotation2 implements Runnable{
         catCafe.hire(JJ);
         catCafe.hire(J);
         catCafe.hire(MrsN);
-
         catCafe.retire(MrsN);
 
         if (!(catCafe.root.catEmployee.equals(C))) {
@@ -1569,21 +1568,21 @@ class getGroomingSchedule4 implements Runnable{
 
 public class A3_Tester2 {
     static String[] tests = {
-            "assignment3.findMostSenior1",
-            "assignment3.findMostSenior2",
-            "assignment3.findMostSenior3",
-            "assignment3.findMostJunior1",
-            "assignment3.findMostJunior2",
-            "assignment3.findMostJunior3",
-            "assignment3.shallow_copy1",
-            "assignment3.shallow_copy2",
-            "assignment3.shallow_copy3",
-            "assignment3.shallow_copy4",
-            "assignment3.hire_rotation1",
-            "assignment3.hire_rotation2",
-            "assignment3.hire_rotation3",
-            "assignment3.hire_rotation4",
-            "assignment3.hire_megaRotation",
+//            "assignment3.findMostSenior1",
+//            "assignment3.findMostSenior2",
+//            "assignment3.findMostSenior3",
+//            "assignment3.findMostJunior1",
+//            "assignment3.findMostJunior2",
+//            "assignment3.findMostJunior3",
+//            "assignment3.shallow_copy1",
+//            "assignment3.shallow_copy2",
+//            "assignment3.shallow_copy3",
+//            "assignment3.shallow_copy4",
+//            "assignment3.hire_rotation1",
+//            "assignment3.hire_rotation2",
+//            "assignment3.hire_rotation3",
+//            "assignment3.hire_rotation4",
+//            "assignment3.hire_megaRotation",
             "assignment3.retire_rotation1",
             "assignment3.retire_rotation2",
             "assignment3.retire_megaRotation3",
@@ -1602,17 +1601,17 @@ public class A3_Tester2 {
 //            "assignment3.hallOfFame3",
 //            "assignment3.hallOfFame4",
 //            "assignment3.hallOfFame5",
-            "assignment3.budgetGroomingExpenses1",
-            "assignment3.budgetGroomingExpenses2",
-            "assignment3.budgetGroomingExpenses3",
-            "assignment3.budgetGroomingExpenses4",
-            "assignment3.budgetGroomingExpenses5",
-            "assignment3.iterator1",
-            "assignment3.iterator2",
-            "assignment3.getGroomingSchedule1",
-            "assignment3.getGroomingSchedule2",
-            "assignment3.getGroomingSchedule3",
-            "assignment3.getGroomingSchedule4",
+//            "assignment3.budgetGroomingExpenses1",
+//            "assignment3.budgetGroomingExpenses2",
+//            "assignment3.budgetGroomingExpenses3",
+//            "assignment3.budgetGroomingExpenses4",
+//            "assignment3.budgetGroomingExpenses5",
+//            "assignment3.iterator1",
+//            "assignment3.iterator2",
+//            "assignment3.getGroomingSchedule1",
+//            "assignment3.getGroomingSchedule2",
+//            "assignment3.getGroomingSchedule3",
+//            "assignment3.getGroomingSchedule4",
     };
     public static void main(String[] args) {
         int numPassed = 0;

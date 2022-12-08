@@ -282,10 +282,6 @@ public class CatCafe implements Iterable<Cat> {
 
 		// remove c from the tree rooted at this and returns the root of the resulting tree
 		public CatNode retire(Cat c) {
-			/*
-			 * TODO: ADD YOUR CODE HERE**
-			 */
-
 			root = remove(root,c); // step 1
 
 //			if (root.catEmployee.getFurThickness() < root.senior.catEmployee.getFurThickness()){
@@ -296,45 +292,69 @@ public class CatCafe implements Iterable<Cat> {
 			// remove cat step (1) all passed but still need to fix heap property (2)
 		}
 		private CatNode remove(CatNode root,Cat c){
-			if (root == null){
+			if (root == null)
 				return null;
-
-			} else if (c.compareTo(root.catEmployee) < 0) {
+			if (c.compareTo(root.catEmployee) < 0) {
 				root.junior = remove(root.junior,c);
 			} else if (c.compareTo(root.catEmployee) > 0) {
 				root.senior = remove(root.senior,c);
-
-				//Base cases
-			} else if (root.junior == null) {
+			}else if(root.junior == null && root.senior == null)
+				root = null;
+			else if (root.junior == null) {
 				if (root.parent == null){
+					root = root.senior;
+					root.parent = null;
+				}else{
 					CatNode parent = root.parent;
 					root = root.senior;
+					parent.senior = root;
 					root.parent = parent;
-				}else{
-					root = root.senior;
 				}
-
-			} else if (root.senior == null) {
+			}
+			else if(root.junior.senior == null && root.senior != null){
 				if (root.parent == null){
+					if(root.junior.catEmployee.getFurThickness() > root.senior.catEmployee.getFurThickness()){
+						CatNode rightChild = root.senior;
+						root = root.junior;
+						root.senior = rightChild;
+					}
+					else{
+						CatNode leftChild = root.junior;
+						root = root.senior;
+						root.parent = null;
+						root.add(root, leftChild.catEmployee);
+					}
+				}else{
+					CatNode leftChild = root.junior;
+					CatNode parent = root.parent;
+					root = root.senior;
+					parent.senior = root;
+					root.parent = parent;
+					root.add(root, leftChild.catEmployee);
+				}
+			}
+			else if (root.senior == null) {
+				if (root.parent == null){
+					root = root.junior;
+					root.parent = null;
+				}else{
 					CatNode parent = root.parent;
 					root = root.junior;
+					parent.junior = root;
 					root.parent = parent;
-				}else{
-					root = root.junior;
 				}
 
 			}else {
+//				CatNode SeniorC = new CatNode(root.junior.findMostSenior());
 				root.catEmployee = root.junior.findMostSenior(); // find the most senior cat in the left subtree and copy it to the root
 				root.junior = remove(root.junior,root.catEmployee); // remove the duplicate seniorC from the left subtree
 			}
 			return root;
 		}
 
+
 		// find the cat with highest seniority in the tree rooted at this
 		public Cat findMostSenior(){
-			/*
-			 * TODO: ADD YOUR CODE HERE
-			 */
 
 			if (this.senior != null){
 				return this.senior.findMostSenior();
